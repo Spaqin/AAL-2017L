@@ -1,0 +1,18 @@
+Graph:
+  A: [B, C, D]
+  B: [E, G, A]
+  C:
+    - H
+
+Treasures:
+  A:
+    value: 15
+    size: 40
+  C:
+    value: 400
+    size: 5
+
+Trunk_size: 800
+
+Start_city: H
+End_city: D

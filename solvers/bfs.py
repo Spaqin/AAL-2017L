@@ -11,22 +11,17 @@ class BFS(object):
 
     def solve_graph(self):
         visited = set()
-        path = []
-        queue = q.Queue()
-        queue.put_nowait(self.start)
-
-        while not queue.empty:
-            parent = queue.get_nowait()
+        queue = [self.start]
+        while len(queue):
+            parent = queue.pop(0)
             if parent == self.end:
                 return self.construct_path(parent)
-
             for child in self.graph.neighbors(parent):
                 if child in visited:
                     continue
                 if child not in queue:
                     self.meta[child] = parent
-                    queue.put_nowait(child)
-
+                    queue.append(child)
             visited.add(parent)
         return []
 
@@ -34,7 +29,7 @@ class BFS(object):
         path = []
         current_node = last_state
         while current_node != self.start:
-            path.append(current_node)
+            path.insert(0, current_node)
             current_node = self.meta[current_node]
-
-        return path.reverse()
+        path.insert(0, self.start)
+        return path
