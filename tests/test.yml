@@ -1,18 +1,31 @@
 Graph:
-  A: [B, C, D]
-  B: [E, G, A]
-  C:
-    - H
+  Seoul: [Pyeongyang, Daejeon]
+  Daegu: [Gyeongju, Daejeon]
+  Busan: [Daegu, Ulsan]
+  Pyeongyang: [Seoul]
+  Gumi: [Daegu, Seoul]
+  Pohang: [Daegu, Ulsan]
+  Jeonju: [Daejeon, Daegu]
+  Ulsan: [Daegu, Pohang, Gyeongju]
 
 Treasures:
-  A:
+  Pohang:
     value: 15
     size: 40
-  C:
+  Daegu:
     value: 400
     size: 5
+  Seoul:
+    value: 320
+    size: 45
+  Daejeon:
+    value: 400
+    size: 135
+  Gumi:
+    value: 46
+    size: 3
 
 Trunk_size: 800
 
-Start_city: H
-End_city: D
+Start_city: Ulsan
+End_city: Pyeongyang

@@ -13,7 +13,7 @@ class Dijkstra(object):
         self.prev = dict()
 
     def solve_graph(self):
-        unvisited = list(self.graph.nodes)
+        unvisited = set(self.graph.nodes)
         dist = dict()
         for node in unvisited:
             # distance to the end node cannot be longer than number of nodes*dist... if dist is const
@@ -24,12 +24,7 @@ class Dijkstra(object):
         dist[self.start] = 0
 
         while len(unvisited) > 0:
-            min_val = (self.graph.number_of_nodes()*self.DISTANCE)**2 + 1
-            u = None
-            for unvis_key in unvisited:
-                if dist[unvis_key] < min_val:
-                    min_val = dist[unvis_key]
-                    u = unvis_key
+            u = min(dist.keys() & unvisited, key=dist.get)
 
             unvisited.remove(u)
 

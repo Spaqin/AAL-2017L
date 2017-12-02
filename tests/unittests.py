@@ -23,8 +23,8 @@ class Tests(unittest.TestCase):
         bfs = BFS(pp.graph, pp.start, pp.end)
         solved = bfs.solve_graph()
         print(solved)
-        self.assertEqual(solved, ['H', 'C', 'A', 'D'])
-
+        self.assertTrue(solved == ['Ulsan', 'Daegu', 'Gumi', 'Seoul', 'Pyeongyang']
+                        or solved == ['Ulsan', 'Daegu', 'Daejeon', 'Seoul', 'Pyeongyang'])
 
     def dijkstra(self):
         with open("tests/test.yml") as f:
@@ -34,7 +34,9 @@ class Tests(unittest.TestCase):
         dijkstra = Dijkstra(pp.graph, pp.start, pp.end)
         solved = dijkstra.solve_graph()
         print(solved)
-        self.assertEqual(solved, ['H', 'C', 'A', 'D'])
+        self.assertTrue(solved == ['Ulsan', 'Daegu', 'Gumi', 'Seoul', 'Pyeongyang']
+                        or solved == ['Ulsan', 'Daegu', 'Daejeon', 'Seoul', 'Pyeongyang'])
+
 
 if __name__ == '__main__':
     unittest.main()
