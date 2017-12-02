@@ -24,7 +24,6 @@ class Dijkstra(object):
         dist[self.start] = 0
 
         while len(unvisited) > 0:
-            # you may not think it, but I love Python
             min_val = (self.graph.number_of_nodes()*self.DISTANCE)**2 + 1
             u = None
             for unvis_key in unvisited:
