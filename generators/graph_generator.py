@@ -20,7 +20,7 @@ class GraphGenerator(object):
         self.random = random
         self.cities = []
 
-    def create_graph(self):
+    def generate_graph(self):
         graph = Graph()
         # populate cities:
         for _ in range(self.node_count):

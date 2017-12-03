@@ -60,14 +60,17 @@ class ProblemParser(object):
     def from_input(self, text_in):
         self.problem = yaml.load(text_in)
         pre_graph = GraphParser.from_dict(self.problem["Graph"])
-        self.graph = TreasureParser.from_dict(self.problem["Treasures"], pre_graph)
+        self.graph = TreasureParser.from_dict_to_graph(self.problem["Treasures"], pre_graph)
         self.trunk_size = self.problem["Trunk_size"]
         self.start = self.problem["Start_city"]
         self.end = self.problem["End_city"]
 
-    def from_problem(self, graph, trunk_size, start, end):
+    def from_problem(self, graph, trunk_size, start, end, treasure_list=None):
         self.problem["Graph"] = GraphParser.to_dict(graph)
-        self.problem["Treasure"] = TreasureParser.to_dict(graph)
+        if treasure_list:
+            self.problem["Treasure"] = TreasureParser.from_list_to_dict(treasure_list)
+        else:
+            self.problem["Treasure"] = TreasureParser.from_graph_to_dict(graph)
         self.problem["Trunk_size"] = trunk_size
         self.problem["Start_city"] = start
         self.problem["End_city"] = end
