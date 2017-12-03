@@ -17,7 +17,7 @@ Treasures:
     size: 5
   Seoul:
     value: 320
-    size: 45
+    size: 15
   Daejeon:
     value: 400
     size: 135
@@ -25,7 +25,7 @@ Treasures:
     value: 46
     size: 3
 
-Trunk_size: 800
+Trunk_size: 150
 
 Start_city: Ulsan
 End_city: Pyeongyang
