@@ -16,7 +16,7 @@ class ProblemGenerator(object):
         self.trunk_size = 0
         self.start = None
         self.end = None
-        
+
     def generate_problem(self):
         self.graph = self.graph_gen.generate_graph()
         cities = self.graph_gen.cities
