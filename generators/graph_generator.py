@@ -33,6 +33,10 @@ class GraphGenerator(object):
         for city in not_connected:
             connected_with = self.random.choice(connected)
             graph.add_edge(connected_with, city)
+            # if the number of neighbors (edges) for connecting city is over max_path, remove it from connected,
+            # so it doesn't overflow no more.
+            if len(graph.neighbors(connected_with)) >= self.max_paths:
+                connected.remove(connected_with)
             connected.append(city)
 
         for city in connected:
@@ -44,6 +48,9 @@ class GraphGenerator(object):
             for _ in range(edge_count):
                 connected_with = self.random.choice(connectable)
                 graph.add_edge(city, connected_with)
+                # same applies, so when we reach max path, remove it from the connectable pool
+                if len(graph.neighbors(connected_with)) >= self.max_paths:
+                    connected.remove(connected_with)
                 connectable.remove(connected_with)
 
         return graph
