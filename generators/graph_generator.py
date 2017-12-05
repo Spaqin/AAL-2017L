@@ -23,8 +23,9 @@ class GraphGenerator(object):
     def generate_graph(self):
         graph = Graph()
         # populate cities:
+        g = self.iter_all_strings()
         for _ in range(self.node_count):
-            self.cities.append(next(self.iter_all_strings()))
+            self.cities.append(next(g))
 
         # to make a connected graph, all nodes should be connected.
         connected = self.cities[:1]
@@ -35,22 +36,33 @@ class GraphGenerator(object):
             graph.add_edge(connected_with, city)
             # if the number of neighbors (edges) for connecting city is over max_path, remove it from connected,
             # so it doesn't overflow no more.
-            if len(graph.neighbors(connected_with)) >= self.max_paths:
+            if len(list(graph.neighbors(connected_with))) == self.max_paths:
                 connected.remove(connected_with)
             connected.append(city)
 
+        i = 0
+        max_i = len(connected)
         for city in connected:
-            neighbors = graph.neighbors(city)
-            edge_count = self.random.randint(self.min_paths-len(neighbors), self.max_paths)
+            print("{}/{}, {}%".format(i, max_i, i*100/max_i))
+            i += 1
+            max_i = len(connected)
+            neighbors = list(graph.neighbors(city))
+            edge_count = self.random.randint(self.min_paths-len(neighbors), self.max_paths-len(neighbors))
             if edge_count < 1:
                 continue
+
             connectable = [c for c in connected if c not in neighbors and c != city]
+            if not len(connectable):
+                continue
             for _ in range(edge_count):
                 connected_with = self.random.choice(connectable)
+
+                if len(list(graph.neighbors(connected_with))) >= self.max_paths:
+                    # connected.remove(connected_with)
+                    connectable.remove(connected_with)
+                    continue
                 graph.add_edge(city, connected_with)
                 # same applies, so when we reach max path, remove it from the connectable pool
-                if len(graph.neighbors(connected_with)) >= self.max_paths:
-                    connected.remove(connected_with)
                 connectable.remove(connected_with)
 
         return graph

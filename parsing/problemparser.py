@@ -1,7 +1,7 @@
 import yaml
 from parsing.graphparser import GraphParser
 from parsing.treasureparser import TreasureParser
-
+from datastructures.problem import Problem
 """
 YAMLs are cool, very readable, easily understandable by people who had lil' bit of Python experience,
 unlike the big scary XMLs or unclear JSONs
@@ -64,14 +64,15 @@ class ProblemParser(object):
         self.trunk_size = self.problem["Trunk_size"]
         self.start = self.problem["Start_city"]
         self.end = self.problem["End_city"]
+        return Problem(self.graph, self.start, self.end, self.trunk_size)
 
-    def from_problem(self, graph, trunk_size, start, end, treasure_list=None):
-        self.problem["Graph"] = GraphParser.to_dict(graph)
-        if treasure_list:
-            self.problem["Treasure"] = TreasureParser.from_list_to_dict(treasure_list)
+    def from_problem(self, problem):
+        self.problem["Graph"] = GraphParser.to_dict(problem.graph)
+        if problem.treasure_list:
+            self.problem["Treasures"] = TreasureParser.from_list_to_dict(problem.treasure_list)
         else:
-            self.problem["Treasure"] = TreasureParser.from_graph_to_dict(graph)
-        self.problem["Trunk_size"] = trunk_size
-        self.problem["Start_city"] = start
-        self.problem["End_city"] = end
+            self.problem["Treasures"] = TreasureParser.from_graph_to_dict(problem.graph)
+        self.problem["Trunk_size"] = problem.trunk_size
+        self.problem["Start_city"] = problem.start
+        self.problem["End_city"] = problem.end
         return yaml.dump(self.problem)

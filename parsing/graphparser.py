@@ -15,5 +15,5 @@ class GraphParser(object):
     def to_dict(graph):
         ret_dict = dict()
         for node in graph.nodes:
-            ret_dict[node] = [graph.neighbors(node)]
+            ret_dict[node] = list(graph.neighbors(node))
         return ret_dict
