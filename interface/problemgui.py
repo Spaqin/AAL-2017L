@@ -8,4 +8,3 @@ def create_plot(graph, path, treasure_list):
     for i in range(len(path)):
         graph[path[i]][path[i+1]]["color"] = "blue"
     edge_colors = [graph[e[0]][e[1]].get("color", "black") for e in graph.edges()]
-    
