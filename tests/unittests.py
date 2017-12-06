@@ -1,5 +1,6 @@
 import unittest
-from parsing.problemparser import ProblemParser,TreasureParser
+from parsing.problemparser import yaml_from_problem, problem_from_input
+from parsing import treasureparser
 from solvers.graph.dijkstra import Dijkstra
 from solvers.graph.bfs import BFS
 from solvers.knapsack.mitm import meet_in_the_middle
@@ -11,8 +12,7 @@ class Tests(unittest.TestCase):
     def parser(self):
         with open("tests/test.yml") as f:
             str = f.read()
-        pp = ProblemParser()
-        pp.from_input(str)
+        pp = problem_from_input(str)
         print(pp.graph.nodes, pp.graph.edges, pp.start, pp.end, pp.trunk_size)
         for node in pp.graph.nodes:
             print(pp.graph.nodes[node].get("treasure", None))
@@ -22,8 +22,7 @@ class Tests(unittest.TestCase):
     def bfs(self):
         with open("tests/test.yml") as f:
             str = f.read()
-        pp = ProblemParser()
-        pp.from_input(str)
+        pp = problem_from_input(str)
         bfs = BFS(pp.graph, pp.start, pp.end)
         solved = bfs.solve_graph()
         print(solved)
@@ -33,8 +32,7 @@ class Tests(unittest.TestCase):
     def dijkstra(self):
         with open("tests/test.yml") as f:
             str = f.read()
-        pp = ProblemParser()
-        pp.from_input(str)
+        pp = problem_from_input(str)
         dijkstra = Dijkstra(pp.graph, pp.start, pp.end)
         solved = dijkstra.solve_graph()
         print(solved)
@@ -44,12 +42,11 @@ class Tests(unittest.TestCase):
     def mitm(self):
         with open("tests/test.yml") as f:
             str = f.read()
-        pp = ProblemParser()
-        pp.from_input(str)
+        pp = problem_from_input(str)
         dijkstra = Dijkstra(pp.graph, pp.start, pp.end)
         solved = dijkstra.solve_graph()
         print(solved)
-        tr_list = TreasureParser.from_graph_with_path(pp.graph, solved)
+        tr_list = treasureparser.treasure_from_graph_with_path(pp.graph, solved)
         print("treasures: ", tr_list)
         to_take = meet_in_the_middle(tr_list, pp.trunk_size)
         print("take: ", to_take)
@@ -59,12 +56,11 @@ class Tests(unittest.TestCase):
     def greedy(self):
         with open("tests/test.yml") as f:
             str = f.read()
-        pp = ProblemParser()
-        pp.from_input(str)
+        pp = problem_from_input(str)
         dijkstra = Dijkstra(pp.graph, pp.start, pp.end)
         solved = dijkstra.solve_graph()
         print(solved)
-        tr_list = TreasureParser.from_graph_with_path(pp.graph, solved)
+        tr_list = treasureparser.treasure_from_graph_with_path(pp.graph, solved)
         print("treasures: ", tr_list)
         to_take = greedy(tr_list, pp.trunk_size)
         print("take: ", to_take)
@@ -75,9 +71,8 @@ class Tests(unittest.TestCase):
         pg = problem_generator.ProblemGenerator(2500, 1500, 1, 5)
         problem = pg.generate_problem()
         yml = pg.problem_to_yml()
-        pp = ProblemParser()
         print(yml)
-        problem_from_yml = pp.from_input(yml)
+        problem_from_yml = problem_from_input(yml)
         self.assertEqual(problem.graph.number_of_nodes(), problem_from_yml.graph.number_of_nodes())
         self.assertEqual(problem.graph.number_of_edges(), problem_from_yml.graph.number_of_edges())
 

@@ -1,6 +1,6 @@
 import yaml
-from parsing.graphparser import GraphParser
-from parsing.treasureparser import TreasureParser
+from parsing.graphparser import graph_to_dict, graph_from_dict
+from parsing.treasureparser import treasure_from_dict_to_graph, treasure_from_graph_to_dict, treasure_from_list_to_dict
 from datastructures.problem import Problem
 """
 YAMLs are cool, very readable, easily understandable by people who had lil' bit of Python experience,
@@ -49,30 +49,24 @@ nodes (ie. graph[A]) - treasure info object, so:
 """
 
 
-class ProblemParser(object):
-    def __init__(self):
-        self.problem = dict()
-        self.graph = None
-        self.trunk_size = None
-        self.start = None
-        self.end = None
+def problem_from_input(text_in):
+    self.problem = yaml.load(text_in)
+    pre_graph = graph_from_dict(self.problem["Graph"])
+    self.graph = treasure_from_dict_to_graph(self.problem["Treasures"], pre_graph)
+    self.trunk_size = self.problem["Trunk_size"]
+    self.start = self.problem["Start_city"]
+    self.end = self.problem["End_city"]
+    return Problem(self.graph, self.start, self.end, self.trunk_size)
 
-    def from_input(self, text_in):
-        self.problem = yaml.load(text_in)
-        pre_graph = GraphParser.from_dict(self.problem["Graph"])
-        self.graph = TreasureParser.from_dict_to_graph(self.problem["Treasures"], pre_graph)
-        self.trunk_size = self.problem["Trunk_size"]
-        self.start = self.problem["Start_city"]
-        self.end = self.problem["End_city"]
-        return Problem(self.graph, self.start, self.end, self.trunk_size)
 
-    def from_problem(self, problem):
-        self.problem["Graph"] = GraphParser.to_dict(problem.graph)
-        if problem.treasure_list:
-            self.problem["Treasures"] = TreasureParser.from_list_to_dict(problem.treasure_list)
-        else:
-            self.problem["Treasures"] = TreasureParser.from_graph_to_dict(problem.graph)
-        self.problem["Trunk_size"] = problem.trunk_size
-        self.problem["Start_city"] = problem.start
-        self.problem["End_city"] = problem.end
-        return yaml.dump(self.problem)
+def yaml_from_problem(problem):
+    final_problem_dict = dict()
+    final_problem_dict["Graph"] = graph_to_dict(problem.graph)
+    if problem.treasure_list:
+        final_problem_dict["Treasures"] = treasure_from_list_to_dict(problem.treasure_list)
+    else:
+        final_problem_dict["Treasures"] = treasure_from_graph_to_dict(problem.graph)
+    final_problem_dict["Trunk_size"] = problem.trunk_size
+    final_problem_dict["Start_city"] = problem.start
+    final_problem_dict["End_city"] = problem.end
+    return yaml.dump(problem)
