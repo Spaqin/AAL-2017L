@@ -43,7 +43,6 @@ class GraphGenerator(object):
         i = 0
         max_i = len(connected)
         for city in connected:
-            print("{}/{}, {}%".format(i, max_i, i*100/max_i))
             i += 1
             max_i = len(connected)
             neighbors = list(graph.neighbors(city))
@@ -55,6 +54,8 @@ class GraphGenerator(object):
             if not len(connectable):
                 continue
             for _ in range(edge_count):
+                if not connectable:
+                    break
                 connected_with = self.random.choice(connectable)
 
                 if len(list(graph.neighbors(connected_with))) >= self.max_paths:

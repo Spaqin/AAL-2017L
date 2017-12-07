@@ -3,8 +3,8 @@ from datastructures.treasure import Treasure
 
 class TreasureGenerator(object):
 
-    VALUE_MIN = 15000
-    VALUE_MAX = 500000
+    VALUE_MIN = 1500
+    VALUE_MAX = 5000
 
     SIZE_MIN = 20
     SIZE_MAX = 600

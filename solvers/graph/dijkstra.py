@@ -4,11 +4,11 @@ g = Graph
 
 
 class Dijkstra(object):
-    def __init__(self, graph, start, end, distance=1):
-        self.graph = graph
+    def __init__(self, problem, distance=1):
+        self.graph = problem.graph
         self.meta = dict()
-        self.start = start
-        self.end = end
+        self.start = problem.start
+        self.end = problem.end
         self.DISTANCE = distance  # default distance between nodes if undefined
         self.prev = dict()
 

@@ -1,6 +1,6 @@
 from generators.graph_generator import GraphGenerator
 from generators.treasure_generator import TreasureGenerator
-from parsing.problemparser import ProblemParser
+from parsing.problemparser import yaml_from_problem
 from datastructures.problem import Problem
 from itertools import combinations_with_replacement
 import networkx as nx
@@ -39,16 +39,13 @@ class ProblemGenerator(object):
         # top 20 or top third, what's lower
         top_number = min(20, len(mapping) // 3)
         top_longest = mapping[-top_number:]
-        print("top third: ", top_longest)
         self.start, self.end, _ = r.choice(top_longest)
-        print("start: {} end: {} hops: {}".format(self.start, self.end, _))
 
         self.problem = Problem(self.graph, self.start, self.end, self.trunk_size, self.treasure_list)
 
         return self.problem
 
     def problem_to_yml(self):
-        problem_parser = ProblemParser()
-        yml = problem_parser.from_problem(self.problem)
+        yml = yaml_from_problem(self.problem)
         return yml
 

@@ -3,11 +3,11 @@ import queue as q
 
 
 class BFS(object):
-    def __init__(self, graph, start, end):
-        self.graph = graph
+    def __init__(self, problem):
+        self.graph = problem.graph
         self.meta = dict()
-        self.start = start
-        self.end = end
+        self.start = problem.start
+        self.end = problem.end
 
     def solve_graph(self):
         visited = set()
