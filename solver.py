@@ -10,7 +10,7 @@ from sys import stdin, stdout
 from plumbum import cli
 from time import perf_counter
 from collections import namedtuple
-
+import logging
 
 class SolverApplication(cli.Application):
     dijkstra_on = False
@@ -80,23 +80,29 @@ class SolverApplication(cli.Application):
         best_size = 0
         total_time_start = perf_counter()
         problem = problemparser.problem_from_input(self.problem_stream)
+        logging.basicConfig(level=logging.INFO)
         if self.bfs_on:
+            logging.info("Running BFS...")
             solver = bfs.BFS(problem)
             path, time = self.bench(solver.solve_graph)
             graph_solutions.add(tuple(path))
             r = self.Result("BFS", time, len(path))
             result_list.append(r)
+            logging.info("BFS ended")
 
         if self.dijkstra_on:
+            logging.info("Running Dijkstra")
             solver = dijkstra.Dijkstra(problem)
             path, time = self.bench(solver.solve_graph)
             graph_solutions.add(tuple(path))
             value = len(path)
             r = self.Result("Dijkstra", time, value)
             result_list.append(r)
+            logging.info("Dijkstra ended")
 
         if self.mitm_on:
             for path in graph_solutions:
+                logging.info("Running MITM for path: {}".format(path))
                 treasure_list = treasureparser.treasure_from_graph_with_path(problem.graph, path)
                 treasures, time = self.bench(mitm.meet_in_the_middle, treasure_list, problem.trunk_size)
                 total_value = 0
@@ -112,9 +118,12 @@ class SolverApplication(cli.Application):
                     best_path = path
                     best_set = treasures
                     best_size = total_size
+                logging.info("MITM iteration ended")
+            logging.info("MITM ended")
 
         if self.greedy_on:
             for path in graph_solutions:
+                logging.info("Running Greedy for path: {}".format(path))
                 treasure_list = treasureparser.treasure_from_graph_with_path(problem.graph, path)
                 treasures, time = self.bench(greedy.greedy, treasure_list, problem.trunk_size)
                 total_value = 0
@@ -130,12 +139,14 @@ class SolverApplication(cli.Application):
                     best_path = path
                     best_set = treasures
                     best_size = total_size
+                logging.info("Greedy iteration ended")
+            logging.info("Greedy ended")
 
         total_time_end = perf_counter()
         print(20*"=", "STATS", 21*"=")
         print("Name    | Time taken [s]| Score (path len/value)")
         for result in result_list:
-            print("{:8}|{:>4.13f}|{:>23}".format(result.name, result.time, result.value))
+            print("{:8}|{:>4.12f}|{:>23}".format(result.name, result.time, result.value))
         print(48*"=")
         print("Total time taken: {}s".format(total_time_end-total_time_start))
         print("Best path: {}".format(best_path))

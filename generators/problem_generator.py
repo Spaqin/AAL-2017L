@@ -19,7 +19,7 @@ class ProblemGenerator(object):
         self.end = None
         self.problem = None
 
-    def generate_problem(self):
+    def generate_problem(self, force_top_longest=True):
         self.graph = self.graph_gen.generate_graph()
         cities = self.graph_gen.cities
         self.treasure_list = self.treasure_gen.generate_treasure_list()
@@ -28,18 +28,22 @@ class ProblemGenerator(object):
             treasure.city = city
             cities.remove(city)
         self.trunk_size = self.treasure_gen.suggested_trunk_size
-        # find some good starting and ending points, from top 3rd of longest paths
-        shortest_paths = dict(nx.all_pairs_shortest_path_length(self.graph))
-        combs = list(combinations_with_replacement(self.graph.nodes, 2))
-        mapping = []
-        for combination in combs:
-            mapping.append((combination[0], combination[1], shortest_paths[combination[0]][combination[1]]))
-        mapping.sort(key=lambda t: t[2])
+        if force_top_longest:
+            # find some good starting and ending points, from top 3rd of longest paths
+            shortest_paths = dict(nx.all_pairs_shortest_path_length(self.graph))
+            combs = list(combinations_with_replacement(self.graph.nodes, 2))
+            mapping = []
+            for combination in combs:
+                mapping.append((combination[0], combination[1], shortest_paths[combination[0]][combination[1]]))
+            mapping.sort(key=lambda t: t[2])
 
-        # top 20 or top third, what's lower
-        top_number = min(20, len(mapping) // 3)
-        top_longest = mapping[-top_number:]
-        self.start, self.end, _ = r.choice(top_longest)
+            # top 20 or top third, what's lower
+            top_number = min(20, len(mapping) // 3)
+            top_longest = mapping[-top_number:]
+            self.start, self.end, _ = r.choice(top_longest)
+        else:
+            self.start = r.choice(list(self.graph.nodes()))
+            self.end = r.choice(list(self.graph.nodes()))
 
         self.problem = Problem(self.graph, self.start, self.end, self.trunk_size, self.treasure_list)
 
