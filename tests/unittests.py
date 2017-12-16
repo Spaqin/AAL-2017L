@@ -26,7 +26,11 @@ class Tests(unittest.TestCase):
             str = f.read()
         pp = problem_from_input(str)
         bfs = BFS(pp)
-        solved = bfs.solve_graph()
+        solved_set = set()
+        for i in range(20):
+            solved = bfs.solve_graph()
+            solved_set.add(tuple(solved))
+            self.assertEqual(len(solved_set), 1)
         print(solved)
         self.assertTrue(solved == ['Ulsan', 'Daegu', 'Gumi', 'Seoul', 'Pyeongyang']
                         or solved == ['Ulsan', 'Daegu', 'Daejeon', 'Seoul', 'Pyeongyang'])
