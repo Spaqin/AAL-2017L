@@ -5,6 +5,7 @@ from solvers.graph.dijkstra import Dijkstra
 from solvers.graph.bfs import BFS
 from solvers.knapsack.mitm import meet_in_the_middle
 from solvers.knapsack.greedy import greedy
+from datastructures.solution import Solution
 from interface import problemgui
 from generators import problem_generator
 
@@ -87,7 +88,8 @@ class Tests(unittest.TestCase):
         solved = dijkstra.solve_graph()
         treasure_list = treasureparser.treasure_from_graph_with_path(pp.graph, solved)
         to_take = greedy(treasure_list, pp.trunk_size)
-        problemgui.draw_plot(pp, solved, to_take)
+        solution = Solution(pp, solved, to_take)
+        problemgui.draw_plot(solution)
 
     def generate_and_draw(self):
         pg = problem_generator.ProblemGenerator(25, 18, 1, 40)
@@ -96,7 +98,7 @@ class Tests(unittest.TestCase):
         solved = dijkstra.solve_graph()
         treasure_list = treasureparser.treasure_from_graph_with_path(problem.graph, solved)
         to_take = meet_in_the_middle(treasure_list, problem.trunk_size)
-        problemgui.draw_plot(problem, solved, to_take)
+        problemgui.draw_plot(Solution(problem, solved, to_take))
 
 
 if __name__ == '__main__':
