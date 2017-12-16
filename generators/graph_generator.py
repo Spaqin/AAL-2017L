@@ -1,6 +1,7 @@
 from networkx import Graph
 from string import ascii_lowercase
 from itertools import product
+import gc
 
 
 class GraphGenerator(object):
@@ -40,18 +41,14 @@ class GraphGenerator(object):
                 connected.remove(connected_with)
             connected.append(city)
 
-        i = 0
-        max_i = len(connected)
         for city in connected:
-            i += 1
-            max_i = len(connected)
             neighbors = list(graph.neighbors(city))
             edge_count = self.random.randint(self.min_paths-len(neighbors), self.max_paths-len(neighbors))
             if edge_count < 1:
                 continue
 
             connectable = [c for c in connected if c not in neighbors and c != city]
-            if not len(connectable):
+            if not connectable:
                 continue
             for _ in range(edge_count):
                 if not connectable:
@@ -59,12 +56,11 @@ class GraphGenerator(object):
                 connected_with = self.random.choice(connectable)
 
                 if len(list(graph.neighbors(connected_with))) >= self.max_paths:
-                    # connected.remove(connected_with)
                     connectable.remove(connected_with)
                     continue
                 graph.add_edge(city, connected_with)
                 # same applies, so when we reach max path, remove it from the connectable pool
                 connectable.remove(connected_with)
-
+            gc.collect()
         return graph
 

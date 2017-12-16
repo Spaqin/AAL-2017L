@@ -32,27 +32,27 @@ class SolverApplication(cli.Application):
         self.bfs_on = True
         self.dijkstra_on = True
 
-    @cli.switch(["-kg", "--greedy"])
+    @cli.switch(["-g", "--greedy"])
     def toggle_greedy(self):
         """Enable greedy algorithm (approx. knapsack solver)"""
         self.greedy_on = True
 
-    @cli.switch(["-km", "--mitm"])
+    @cli.switch(["-m", "--mitm"])
     def toggle_mitm(self):
         """Enable Meet-In-The-Middle (MITM) algorithm (exact knapsack solver)"""
         self.mitm_on = True
 
-    @cli.switch(["-gb", "--bfs"])
+    @cli.switch(["-b", "--bfs"])
     def toggle_bfs(self):
         """Enable Breadth First Search algorithm (for graph)"""
         self.bfs_on = True
 
-    @cli.switch(["-gd", "--dijkstra"])
+    @cli.switch(["-d", "--dijkstra"])
     def toggle_dijkstra(self):
         """Enable Dijkstra algorithm (for graph)"""
         self.dijkstra_on = True
 
-    @cli.switch(["-d", "--display"])
+    @cli.switch(["-s", "--show"])
     def toggle_display(self):
         """Enables display of the results with matplotlib"""
         self.display_results = True
@@ -88,7 +88,7 @@ class SolverApplication(cli.Application):
             graph_solutions.add(tuple(path))
             r = self.Result("BFS", time, len(path))
             result_list.append(r)
-            logging.info("BFS ended")
+            logging.info("BFS finished")
 
         if self.dijkstra_on:
             logging.info("Running Dijkstra")
@@ -98,7 +98,7 @@ class SolverApplication(cli.Application):
             value = len(path)
             r = self.Result("Dijkstra", time, value)
             result_list.append(r)
-            logging.info("Dijkstra ended")
+            logging.info("Dijkstra finished")
 
         if self.mitm_on:
             for path in graph_solutions:
@@ -146,7 +146,7 @@ class SolverApplication(cli.Application):
         print(20*"=", "STATS", 21*"=")
         print("Name    | Time taken [s]| Score (path len/value)")
         for result in result_list:
-            print("{:8}|{:>4.12f}|{:>23}".format(result.name, result.time, result.value))
+            print("{:8}|{:>4.13f}|{:>23}".format(result.name, result.time, result.value))
         print(48*"=")
         print("Total time taken: {}s".format(total_time_end-total_time_start))
         print("Best path: {}".format(best_path))
