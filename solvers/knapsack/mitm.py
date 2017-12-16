@@ -21,6 +21,7 @@ def meet_in_the_middle(treasure_list, trunk_size):
                     total_value = sum(treasure.value for treasure in total_set)
                     if total_value > max_total_value:
                         to_take = total_set
+                        max_total_value = total_value
     return to_take
 
 

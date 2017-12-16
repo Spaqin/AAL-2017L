@@ -77,6 +77,7 @@ class SolverApplication(cli.Application):
         best_algo = None
         best_path = None
         best_set = None
+        best_size = 0
         total_time_start = perf_counter()
         problem = problemparser.problem_from_input(self.problem_stream)
         if self.bfs_on:
@@ -99,8 +100,10 @@ class SolverApplication(cli.Application):
                 treasure_list = treasureparser.treasure_from_graph_with_path(problem.graph, path)
                 treasures, time = self.bench(mitm.meet_in_the_middle, treasure_list, problem.trunk_size)
                 total_value = 0
+                total_size = 0
                 for tr in treasures:
                     total_value += tr.value
+                    total_size += tr.size
                 r = self.Result("Mitm", time, total_value)
                 result_list.append(r)
                 if max_value < total_value:
@@ -108,14 +111,17 @@ class SolverApplication(cli.Application):
                     best_algo = "MITM"
                     best_path = path
                     best_set = treasures
+                    best_size = total_size
 
         if self.greedy_on:
             for path in graph_solutions:
                 treasure_list = treasureparser.treasure_from_graph_with_path(problem.graph, path)
                 treasures, time = self.bench(greedy.greedy, treasure_list, problem.trunk_size)
                 total_value = 0
+                total_size = 0
                 for tr in treasures:
                     total_value += tr.value
+                    total_size += tr.size
                 r = self.Result("Greedy", time, total_value)
                 result_list.append(r)
                 if max_value < total_value:
@@ -123,6 +129,7 @@ class SolverApplication(cli.Application):
                     best_algo = "Greedy"
                     best_path = path
                     best_set = treasures
+                    best_size = total_size
 
         total_time_end = perf_counter()
         print(20*"=", "STATS", 21*"=")
@@ -130,11 +137,12 @@ class SolverApplication(cli.Application):
         for result in result_list:
             print("{:8}|{:>4.13f}|{:>23}".format(result.name, result.time, result.value))
         print(48*"=")
-        print("Total time taken: {}".format(total_time_end-total_time_start))
+        print("Total time taken: {}s".format(total_time_end-total_time_start))
         print("Best path: {}".format(best_path))
         print("Best knapsack algorithm: {}".format(best_algo))
         print("Best set: {}".format(best_set))
         print("Total value: {}".format(max_value))
+        print("Total size: {} out of max {}".format(best_size, problem.trunk_size))
         stdout.flush()
         if self.display_results:
             solution = Solution(problem, path=best_path, to_take=best_set)
