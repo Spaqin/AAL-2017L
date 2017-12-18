@@ -10,8 +10,8 @@ def meet_in_the_middle(treasure_list, trunk_size):
     second_half = treasure_list[len(treasure_list)//2:]
     to_take = []
     max_total_value = 0
-    first_half_superset = list(superset(first_half))
-    second_half_superset = list(superset(second_half))
+    first_half_superset = superset(first_half)
+    second_half_superset = superset(second_half)
     for first_treasure_set in first_half_superset:
         for second_treasure_set in second_half_superset:
             total_set = first_treasure_set + second_treasure_set
